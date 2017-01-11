@@ -39,6 +39,11 @@ hs_err_pid*
 Network Trash Folder
 Temporary Items
 .apdisk
+.gradle/
+.idea/
+eclipse/
+out/
+Server/
 
 # Windows
 # =========================
@@ -61,3 +66,16 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+build.gradle.bak
+forge-1.7.10-10.13.4.1614-1.7.10-src.ipr
+forge-1.7.10-10.13.4.1614-1.7.10-src.iws
+README.txt
+forge-1.7.10-10.13.4.1614-1.7.10-changelog.txt
+gradle/wrapper/gradle-wrapper.properties
+CREDITS-fml.txt
+AcademyGravityMaster.iml
+*.ipr
+AcademyGravityMaster.iws
+MinecraftForge-Credits.txt
+LICENSE-fml.txt
+MinecraftForge-License.txt

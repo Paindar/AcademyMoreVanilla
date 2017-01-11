@@ -23,7 +23,8 @@ import static cn.lambdalib.util.generic.MathUtils.lerpf;
 public class TrickShotContext extends Context
 {
     private static final String MSG_SYNC = "msg_sync";
-    private static final String MSG_SPAWN_POS = "effect";
+    private static final String MSG_SPAWN_POS = "msg_effect";
+    private static final String MSG_ACQUIRE = "msg_acquire";
 
     public TrickShotContext(EntityPlayer player)
     {
@@ -48,6 +49,13 @@ public class TrickShotContext extends Context
         return ctx.consume(overload, cp);
     }
 
+    @Listener(channel=MSG_MADEALIVE,side={Side.CLIENT})
+    private void setCooldown()
+    {
+        if (consume()) {
+            ctx.setCooldown((int) lerpf(20, 10, ctx.getSkillExp()));
+        }
+    }
 
     @Listener(channel=MSG_MADEALIVE, side={Side.SERVER})
     private void execute()
@@ -62,24 +70,12 @@ public class TrickShotContext extends Context
 
             ctx.addSkillExp(.005f);
             ctx.setCooldown((int) lerpf(20, 10, exp));
-            sendToClient(MSG_SPAWN_POS,missile);
             AcademyMoreVanilla.log.info("start running.");
         }
 
     }
 
-    @SideOnly(Side.CLIENT)
-    @Listener(channel = MSG_SPAWN_POS,side={Side.CLIENT})
-    private void spawnMissile(TrickShotMissile shotMissile)
-    {
-        AcademyMoreVanilla.log.info("try.");
-        if(shotMissile==null)
-        {
-            AcademyMoreVanilla.log.info("shotMissile is null! Exit!");
-            sendToServer(MSG_TERMINATED);
-        }
 
-    }
 
     private void explode()
     {
@@ -148,25 +144,43 @@ public class TrickShotContext extends Context
             }
 
         }
-
-
-
     }
 
     @SideOnly(Side.CLIENT)
     @Listener(channel = MSG_SYNC,side={Side.CLIENT})
     private void syncPosition(Vec3 pos)
     {
-        try
+        if (missile!=null)
         {
-            //missile.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+            missile.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+            AcademyMoreVanilla.log.info("move unit.");
         }
-        catch(NullPointerException e)
+        else
         {
-             System.exit(0);
+            sendToServer(MSG_ACQUIRE);
         }
     }
 
+    @SideOnly(Side.SERVER)
+    @Listener(channel=MSG_ACQUIRE,side={Side.SERVER})
+    private void getAcquired(){
+        AcademyMoreVanilla.log.info("key = ");
+        sendToClient(MSG_SPAWN_POS,missile);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Listener(channel=MSG_SPAWN_POS,side={Side.CLIENT})
+    private void spawnMissile(TrickShotMissile shotMissile)
+    {
+        AcademyMoreVanilla.log.info("try.");
+        missile=shotMissile;
+        if(shotMissile==null)
+        {
+            AcademyMoreVanilla.log.info("failed to init: argument is null.");
+        }
+
+
+    }
 
     @Override
     public void terminate()
