@@ -1,0 +1,6 @@
+ac.ability.danmakumaster.name=弹幕使
+
+### 电击使 技能
+ac.ability.danmakumaster.trickshot.name=轨迹魔弹
+
+ac.ability.danmakumaster.trickshot.desc=向前释放出一个缓慢移动的射弹，射弹在飞行一段距离或击中某个生物后会发生爆炸，对周围生物造成伤害，但不会破坏方块。
