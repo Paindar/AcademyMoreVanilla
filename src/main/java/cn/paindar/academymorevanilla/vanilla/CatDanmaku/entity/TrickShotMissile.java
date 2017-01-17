@@ -1,32 +1,23 @@
 package cn.paindar.academymorevanilla.vanilla.CatDanmaku.entity;
 
-
-import cn.academy.core.client.ACRenderingHelper;
 import cn.lambdalib.annoreg.core.Registrant;
 import cn.lambdalib.annoreg.mc.RegEntity;
-import cn.lambdalib.template.client.render.entity.RenderIcon;
-import cn.lambdalib.util.client.RenderUtils;
-import cn.lambdalib.util.client.shader.ShaderSimple;
 import cn.lambdalib.util.entityx.EntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 /**
  * Created by Paindar on 2016/12/29.
  */
 
+@Registrant
+@RegEntity
 public class TrickShotMissile extends EntityAdvanced
 {
-
-    EntityPlayer spawner;
+    private EntityPlayer spawner;
     public float size=1;
     public float maxSize;
     double expandRate;
@@ -34,6 +25,7 @@ public class TrickShotMissile extends EntityAdvanced
     public double alphaWiggle = 0.5;
     public int r,g,b;
     int texturesId=0;
+    public int life=0;
     static final int MAX_TETXURES = 5;
     static IIcon itemIcon ;
 
@@ -58,8 +50,12 @@ public class TrickShotMissile extends EntityAdvanced
         this.b=b;
     }
     @Override
-    protected void entityInit() {
-
+    public void entityInit() {
+        dataWatcher.addObject(3, Integer.valueOf(0));
+        dataWatcher.addObject(4, Float.valueOf(0));
+        dataWatcher.addObject(5, Float.valueOf(0));
+        dataWatcher.addObject(6, Float.valueOf(0));
+        dataWatcher.addObject(7, Integer.valueOf(0));
     }
 
     @SideOnly(Side.CLIENT)
@@ -72,7 +68,7 @@ public class TrickShotMissile extends EntityAdvanced
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {setDead();}
+    protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {}
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {}
